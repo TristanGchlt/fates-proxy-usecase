@@ -1,0 +1,6 @@
+# Virtual python environment (generated)
+.venv
+
+# Processed data (generated)
+data/processed/*
+!data/processed/.gitkeep
