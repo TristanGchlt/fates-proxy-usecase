@@ -4,3 +4,6 @@
 # Processed data (generated)
 data/processed/*
 !data/processed/.gitkeep
+
+# Pycache (generated)
+__pycache__/
