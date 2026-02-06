@@ -12,8 +12,18 @@ RAW_DATA_FILE = PROJECT_ROOT / "data" / "raw" / "data.csv"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
 
 
-def main() :
-    dataset = load_csv(RAW_DATA_FILE)
+def main(raw_data_file=RAW_DATA_FILE, output_path=OUTPUT_PATH) :
+    """
+    Clean and prepare data for the ML training
+    
+    args:
+        raw_data_file: Path of the raw dataset file
+        output_path: Path for the clean data to be saved on
+
+    returns:
+        dataset: Clean data
+    """
+    dataset = load_csv(raw_data_file)
 
     # Missing values replacement
     dataset = nullify_values(dataset, "?")
@@ -48,7 +58,9 @@ def main() :
     dataset = remove_columns(dataset, columns_to_be_removed)
 
     # Save the data
-    save_csv(dataset, OUTPUT_PATH)
+    save_csv(dataset, output_path)
+
+    return dataset
 
 if __name__ == "__main__" :
     main()
