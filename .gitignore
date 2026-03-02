@@ -9,5 +9,9 @@ data/processed/*
 data/split/*
 !data/split/.gitkeep
 
+# Models (generated)
+models/*
+!models/.gitkeep
+
 # Pycache (generated)
 __pycache__/

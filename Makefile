@@ -6,3 +6,6 @@ preprocess:
 
 split:
 	poetry run python scripts/split_data.py
+
+train:
+	poetry run python scripts/model_training.py
