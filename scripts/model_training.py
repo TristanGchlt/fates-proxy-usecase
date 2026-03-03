@@ -19,7 +19,7 @@ MODEL_HYPERPARAMETERS = {
     "max_depth": 10,
     "random_state": 1
 }
-METRICS = []
+METRICS = ['accuracy', 'f1_score', 'demographic_parity', 'equalized_odds']
 
 MODEL_PATH = PROJECT_ROOT / "models" / MODEL_NAME
 
@@ -55,7 +55,7 @@ def main(
 
     save_model(model, model_type, model_path)
 
-    measures = compute_measures(model, data, metrics)
+    measures = compute_measures(data, metrics)
 
     save_measures(measures, model_path)
 

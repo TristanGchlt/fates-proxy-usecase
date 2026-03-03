@@ -4,13 +4,16 @@ import json
 
 
 METRICS_FUNC = {
-    # "accuracy" : perf.accuracy,
+    "accuracy" : perf.accuracy,
+    "f1_score" : perf.f1,
+    "demographic_parity" : fairness.demographic_parity,
+    "equalized_odds" : fairness.equalized_odds
 }
 
-def compute_measures(model, data, metrics) :
+def compute_measures(data, metrics) :
     measures = {}
     for metric in metrics :
-        measures[metric] = METRICS_FUNC[metric](model, data)
+        measures[metric] = METRICS_FUNC[metric](data)
     return measures
 
 def save_measures(measures, model_path) :
