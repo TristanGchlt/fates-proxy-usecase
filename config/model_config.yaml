@@ -1,0 +1,11 @@
+model_name : RFC_baseline
+model_type : "Random Forest Classifier"
+model_hyperparameters :
+  n_estimators : 100
+  max_depth : 10
+  random_state : 1
+metrics : 
+  - accuracy
+  - f1_score
+  - demographic_parity
+  - equalized_odds

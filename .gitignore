@@ -1,17 +1,21 @@
-# Virtual python environment (generated)
+# Virtual python environment
 .venv
 
-# Processed data (generated)
+# Processed data
 data/processed/*
 !data/processed/.gitkeep
 
-# Split data (generated)
+# Split data
 data/split/*
 !data/split/.gitkeep
 
-# Models (generated)
+# Models
 models/*
 !models/.gitkeep
 
-# Pycache (generated)
+# Pycache
 __pycache__/
+
+# MLFlow
+mlruns/
+mlflow.db

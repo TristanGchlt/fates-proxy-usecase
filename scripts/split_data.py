@@ -4,27 +4,25 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
-from src.utils import load_csv, save_csv
+from src.utils import load_csv, save_csv, read_config
 from src.data.split import train_test, x_y_p
 
 PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
-
-# To be sent to a config file
-PROTECTED_FEATURE = "sex"
-TARGET_FEATURE = "income"
-RANDOM_STATE = 1
-SPLIT_TEST_SIZE = 0.8
+CONFIG_PATH = PROJECT_ROOT / "config" / "data_config.yaml"
 SPLIT_PATH = PROJECT_ROOT / "data" / "split"
 
 
-def main(processed_data_path=PROCESSED_DATA_PATH, 
-         test_size=SPLIT_TEST_SIZE, 
-         seed=RANDOM_STATE, 
-         target_feature=TARGET_FEATURE, 
-         protected_feature=PROTECTED_FEATURE,
+def main(config_path=CONFIG_PATH,
+         processed_data_path=PROCESSED_DATA_PATH,
          split_path=SPLIT_PATH
          ) :
     
+    config = read_config(config_path)
+    test_size=config['test_size']
+    seed = config['random_state']
+    target_feature = config['target_feature']
+    protected_feature = config['protected_feature']
+
     dataset = load_csv(processed_data_path)
 
     train, test = train_test(dataset, test_size, seed)
@@ -39,7 +37,12 @@ def main(processed_data_path=PROCESSED_DATA_PATH,
     save_csv(y_test, split_path / "y_test.csv")
     save_csv(p_test, split_path / "p_test.csv")
 
-    return X_train, y_train, p_train, X_test, y_test, p_test
+    return {
+        "test_size" : test_size,
+        "split_seed" : seed,
+        "target" : target_feature,
+        "protected" : protected_feature
+    }
 
 if __name__ == "__main__" :
     main()

@@ -9,3 +9,9 @@ split:
 
 train:
 	poetry run python scripts/model_training.py
+
+pipeline:
+	poetry run python pipeline.py
+
+mlflow:
+	poetry run mlflow ui
