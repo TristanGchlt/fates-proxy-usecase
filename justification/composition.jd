@@ -1,0 +1,6 @@
+composition {
+justification deployable is assemble(fair, perf) {
+        conclusionLabel: 'Model is deployable'
+        strategyLabel: 'All conditions are met'
+    }
+}

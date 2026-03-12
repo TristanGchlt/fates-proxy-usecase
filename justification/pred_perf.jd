@@ -1,0 +1,13 @@
+justification perf {
+
+    conclusion c is "Model is Performant"
+    
+    strategy acc_threshold is "Accuracy is greater than 0.8"
+    acc_threshold supports c
+
+    evidence model is "Model is available"
+    model supports acc_threshold
+
+    evidence dataset is "Test dataset is available" 
+    dataset supports acc_threshold
+}
