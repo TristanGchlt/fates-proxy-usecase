@@ -16,3 +16,9 @@ def save_pickle_model(model, model_path) :
 
 def predict(model, data) :
     return model.predict(data['X_test']) # Cette fonction doit devenir dynamique selon le type de model
+
+def save_model_type(model_type : str, path : str) :
+    model_type_path = path / "model_type.txt"
+    with open(model_type_path, "w") as f:
+        f.write(model_type)
+    return None

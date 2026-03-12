@@ -9,3 +9,4 @@ metrics :
   - f1_score
   - demographic_parity
   - equalized_odds
+prod : True
