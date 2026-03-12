@@ -6,6 +6,7 @@ sys.path.append(str(PROJECT_ROOT))
 
 from src.utils import load_csv, save_csv, read_config
 from src.data.split import train_test, x_y_p
+from src.data.data_preparation import resample
 
 PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
 CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
@@ -19,10 +20,12 @@ def main(config_path=CONFIG_PATH,
     
     config = read_config(config_path)
     test_size=config['test_size']
-    seed = config['random_state']
+    seed = config['split_random_seed']
     target_feature = config['target_feature']
     protected_feature = config['protected_feature']
     split_strategy = config['f_split_strategy']
+    balance_strategy = config['f_balance']
+    balance_seed = config['f_balance_seed']
 
     dataset = load_csv(processed_data_path)
 
@@ -30,6 +33,8 @@ def main(config_path=CONFIG_PATH,
 
     X_train, y_train, p_train = x_y_p(train, target_feature, protected_feature)
     X_test, y_test, p_test = x_y_p(test, target_feature, protected_feature)
+
+    X_train, y_train, p_train = resample(X_train, y_train, p_train, balance_strategy, balance_seed)
 
     save_csv(X_train, split_path / "X_train.csv") 
     save_csv(y_train, split_path / "y_train.csv")
@@ -43,7 +48,8 @@ def main(config_path=CONFIG_PATH,
         "split_seed" : seed,
         "target" : target_feature,
         "protected" : protected_feature,
-        "split_strategy" : split_strategy
+        "split_strategy" : split_strategy,
+        "balance_strategy" : balance_strategy
     }
 
 if __name__ == "__main__" :

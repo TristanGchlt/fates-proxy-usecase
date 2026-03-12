@@ -4,8 +4,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
-from src.data.data_cleaning import nullify_values, fill_missing_values
-from src.data.data_preparation import create_binary_column, create_dummy_columns, convert_columns_type, remove_columns
+from src.data.data_cleaning import nullify_values, fill_missing_values, create_binary_column, create_dummy_columns, convert_columns_type, remove_columns
 from src.utils import load_csv, save_csv
 
 RAW_DATA_FILE = PROJECT_ROOT / "data" / "raw" / "data.csv"

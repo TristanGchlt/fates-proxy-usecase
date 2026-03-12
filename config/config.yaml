@@ -1,9 +1,13 @@
 ### DATA CONFIG
+# Data preparation
 protected_feature : sex
 target_feature : income
-random_state : 1
+split_random_seed : 1
 test_size : 0.2
+# Data fairness
 f_split_strategy : random # Strategies : random, stratified
+f_balance : none # Balances : none, undersampling / Plus tard on pourrait ajouter oversampling et smote
+f_balance_seed : 1
 
 ### MODEL CONFIG
 model_name : RFC_Baseline
@@ -19,6 +23,6 @@ metrics :
   - f1_score
   - demographic_parity
   - equalized_odds
-  
+
 ### TO PRODUCTION
 prod : False

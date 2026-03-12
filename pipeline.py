@@ -6,8 +6,8 @@ import mlflow.sklearn
 PROJECT_ROOT = Path(__file__).resolve().parents[0]
 sys.path.append(str(PROJECT_ROOT))
 
-from scripts.clean_and_prepare_data import main as clean
-from scripts.split_data import main as split
+from scripts.clean_data import main as clean
+from scripts.prepare_data import main as split
 from scripts.model_training import main as train
 from src.utils import read_config, clean_folder
 from src.models.utils import save_model, save_model_type
