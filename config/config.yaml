@@ -1,21 +1,24 @@
-# DATA CONFIG
+### DATA CONFIG
 protected_feature : sex
 target_feature : income
 random_state : 1
 test_size : 0.2
 f_split_strategy : random # Strategies : random, stratified
-# MODEL CONFIG
+
+### MODEL CONFIG
 model_name : RFC_Baseline
 model_type : "Random Forest Classifier"
 model_hyperparameters :
   n_estimators : 100
   max_depth : 10
   random_state : 1
-# EVAL CONFIG
+
+### EVAL CONFIG
 metrics : 
   - accuracy
   - f1_score
   - demographic_parity
   - equalized_odds
-# TO PRODUCTION
+  
+### TO PRODUCTION
 prod : False
