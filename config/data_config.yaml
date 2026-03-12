@@ -1,5 +1,0 @@
-protected_feature : sex
-target_feature : income
-random_state : 1
-test_size : 0.2
-f_split_strategy : random # Strategies : random, stratified

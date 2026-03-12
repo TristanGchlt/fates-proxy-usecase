@@ -8,7 +8,7 @@ from src.utils import load_csv, save_csv, read_config
 from src.data.split import train_test, x_y_p
 
 PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
-CONFIG_PATH = PROJECT_ROOT / "config" / "data_config.yaml"
+CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
 SPLIT_PATH = PROJECT_ROOT / "data" / "split"
 
 

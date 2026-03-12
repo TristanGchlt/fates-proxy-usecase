@@ -9,7 +9,7 @@ from src.models.training import train
 from src.models.utils import predict
 from src.metrics.utils import compute_measures
 
-CONFIG_PATH = PROJECT_ROOT / "config" / "model_config.yaml"
+CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
 SPLIT_PATH = PROJECT_ROOT / "data" / "split"
 
 

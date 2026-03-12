@@ -15,17 +15,15 @@ from src.models.utils import save_model, save_model_type
 RAW_DATA_FILE = PROJECT_ROOT / "data" / "raw" / "data.csv"
 CLEAN_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
 
-DATA_CONFIG_PATH = PROJECT_ROOT / "config" / "data_config.yaml"
+CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
 SPLIT_PATH = PROJECT_ROOT / "data" / "split"
-
-MODEL_CONFIG_PATH = PROJECT_ROOT / "config" / "model_config.yaml"
 
 PROD_PATH = PROJECT_ROOT / "model"
 
 def run_pipeline() :
     mlflow.set_experiment("my_experiment")
 
-    config = read_config(MODEL_CONFIG_PATH)
+    config = read_config(CONFIG_PATH)
     model_name = config['model_name']
 
     with mlflow.start_run(run_name=model_name):
@@ -33,14 +31,14 @@ def run_pipeline() :
         clean(raw_data_file=RAW_DATA_FILE,
               output_path=CLEAN_DATA_PATH)
         
-        split_logs = split(config_path=DATA_CONFIG_PATH,
+        split_logs = split(config_path=CONFIG_PATH,
                             processed_data_path=CLEAN_DATA_PATH,
                             split_path=SPLIT_PATH)
         
         for key, value in split_logs.items():
             mlflow.log_param(key, value)
         
-        model_logs = train(config_path=MODEL_CONFIG_PATH,
+        model_logs = train(config_path=CONFIG_PATH,
                             split_path=SPLIT_PATH)
         
         mlflow.log_params(model_logs['hyperparameters'])
