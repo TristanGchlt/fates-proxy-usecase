@@ -1,4 +1,4 @@
-model_name : RFC_baseline
+model_name : RFC_Baseline
 model_type : "Random Forest Classifier"
 model_hyperparameters :
   n_estimators : 100
@@ -9,4 +9,4 @@ metrics :
   - f1_score
   - demographic_parity
   - equalized_odds
-prod : True
+prod : False

@@ -22,10 +22,11 @@ def main(config_path=CONFIG_PATH,
     seed = config['random_state']
     target_feature = config['target_feature']
     protected_feature = config['protected_feature']
+    split_strategy = config['f_split_strategy']
 
     dataset = load_csv(processed_data_path)
 
-    train, test = train_test(dataset, test_size, seed)
+    train, test = train_test(dataset, test_size, protected_feature, split_strategy, seed)
 
     X_train, y_train, p_train = x_y_p(train, target_feature, protected_feature)
     X_test, y_test, p_test = x_y_p(test, target_feature, protected_feature)
@@ -41,7 +42,8 @@ def main(config_path=CONFIG_PATH,
         "test_size" : test_size,
         "split_seed" : seed,
         "target" : target_feature,
-        "protected" : protected_feature
+        "protected" : protected_feature,
+        "split_strategy" : split_strategy
     }
 
 if __name__ == "__main__" :
