@@ -39,4 +39,24 @@ During the data preparation, we track parameters such as the test sample size.
 During the model training, we track the hyperparameters in order to reproduce the training.
 After the model training, we track the metrics in order to compare multiple models.
 
-![Process Schema](readme_schema.png "Process Schema")
+![Pipeline Schema](readme_schema_1.png "Pipeline Schema")
+
+## WIP
+
+### Justifications and Continuous Integration to test a model to be on production
+
+Implementation of a CI process to test justifications described with JPipe Justification Diagrams.
+
+![CI Schema](readme_schema_2.png "WIP CI Pipeline Schema")
+
+### Fairness Package
+
+Implementation of optional fairness process and evaluation in order to justify fairness constraints according to justifications to be tested on CI.
+
+![Fairness Schema](readme_schema_3.png "WIP Fairness Pipeline Schema")
+
+### Transparency Package
+
+Implementation of optional transparency evaluation in order to justify transparency constraints according to justifications to be tested on CI.
+
+![Transparency Schema](readme_schema_4.png "WIP Transparency Pipeline Schema")
