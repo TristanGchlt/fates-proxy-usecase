@@ -1,0 +1,51 @@
+name: Release the trained model
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'img/**'
+      - 'Makefile'
+
+  pull_request:
+
+env:
+  JUSTIFICATION_MODEL: "./justification/jd/deployable.jd"
+
+jobs:
+
+  check-release-is-ok:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout source code 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install Poetry
+      - name: Install poetry
+        run: pipx install poetry
+
+      # Install python 3.11 with poetry cache
+      - name: Install Python with poetry cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'poetry'
+      
+      # Install python dependencies, if needed
+      - name: Install dependencies with poetry
+        run: poetry install --no-root
+
+      # Run the justification
+      - name: Run jPipe Runner to support model training justification
+        uses: jpipe-mcscert/jpipe-runner@1.0.0
+        with:
+          jd_file: ${{ env.JUSTIFICATION_MODEL }}
+          version: "1.0.0"
+          python_path: "poetry run python"
+          library: |
+            justification/py/deployable.py
