@@ -1,6 +1,7 @@
-composition {
+load "./fairness.jd"
+load "./pred_perf.jd"
+
 justification deployable is assemble(fair, perf) {
         conclusionLabel: 'Model is deployable'
         strategyLabel: 'All conditions are met'
-    }
 }

@@ -21,12 +21,19 @@ SPLIT_PATH = PROJECT_ROOT / "data" / "split"
 PROD_PATH = PROJECT_ROOT / "model"
 
 def run_pipeline() :
+
+    # Préparation du tracking
     mlflow.set_experiment("my_experiment")
 
+    # Récupération des paramètres
     config = read_config(CONFIG_PATH)
     model_name = config['model_name']
 
     with mlflow.start_run(run_name=model_name):
+
+        ####
+        # Nettoyage et préparation des données
+        ####
 
         clean(raw_data_file=RAW_DATA_FILE,
               output_path=CLEAN_DATA_PATH)
@@ -37,6 +44,10 @@ def run_pipeline() :
         
         for key, value in split_logs.items():
             mlflow.log_param(key, value)
+
+        ####
+        # Entrainement et évaluation du modèle
+        ####
         
         model_logs = train(config_path=CONFIG_PATH,
                             split_path=SPLIT_PATH)
@@ -46,6 +57,10 @@ def run_pipeline() :
             mlflow.log_metric(metric, value)
         mlflow.sklearn.log_model(model_logs['model'], 
                                  name="model")
+        
+    ####
+    # Replacement du modèle principal, celui évalué en intégration continue
+    ####
         
     if config['prod'] :
         model = model_logs['model']

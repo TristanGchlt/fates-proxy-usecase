@@ -1,4 +1,5 @@
 # fates-proxy-usecase
+
 Use of well-known fair-classification public dataset as an example for FATES-MLOps project process of continuously tracking Fairness, Accountability, Transparency, Ethics and Safety requirements in an ML application.
 
 ## Table of contents
@@ -19,8 +20,7 @@ You should now have a ".venv" python with the right dependencies to run any code
 
 ## Configuration
 
-All the code will read the config files in the ``config/`` folder. 
-You can use ``data_config.yaml`` for the data preparation, and ``model_config.yaml`` to tune the hyper parameters, the model type and the metrics you want to track.
+The code will rely on the config files in the ``config/`` folder. 
 
 ## Usage
 
@@ -34,10 +34,10 @@ If you want to check the state of the tracking, use ``poetry run mlflow ui``
 
 ## Tracking
 
-When you run the pipeline, many logs are tracked in order to reproduce and compare the iteration with others.
+When you run the pipeline, many logs are tracked in order to reproduce and compare iteration.
 During the data preparation, we track parameters such as the test sample size.
-During the model training, we track the hyperparameters in order to reproduce the training.
-After the model training, we track the metrics in order to compare multiple models.
+During the model training, we track the model hyperparameters.
+After the model training, we track metrics in order to compare multiple models.
 
 ![Pipeline Schema](img/readme_schema_1.png "Pipeline Schema")
 
