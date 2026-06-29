@@ -8,12 +8,40 @@ from jpipe_runner.framework.decorators.link_decorator import jpipe_link
 
 JpipeProduce = Callable[[str, Any], None]
 
+from pathlib import Path
+import pandas as pd
+
+HERE = Path(__file__).resolve().parent
+PROJECT_ROOT = HERE.parent.parent
+
+# ces variables globales de l'ancienne version vont être géré par le "produce"
+# FAIRNESS_THRESHOLD: float | None = None
+# FAIRNESS_THRESHOLD_TYPE: str | None = None
+# MODEL: object | None = None
+# X_TEST: pd.DataFrame | None = None
+# Y_TEST: pd.DataFrame | None = None
+# FAIRNESS_MEASURE_FUNCTION: str | None = None
+# FAIRNESS_MEASURE: float | None = None
+
+# Le but est de retourner true ou false dans chaque fonction
+# il me semble qu'en général :
+# une evidence va faire un ou des "produce"
+# une stratégie va faire un ou des "consume" et éventuellement un ou des "produce"
+# une conclusion va simplement retourner True sans traitement
+
+# Questions :
+#
+# Pourquoi les conclusions apparaissent dans le squelette de code ? 
+# Dans quels cas on va avoir des test sur les conclusions ou sous conclusions, qui ne pourraient pas être déportés sur la stratégie qui les précède.
+#
+# Pourquoi la conclusion finale est la seule qui n'a pas le JpipeProduce en argument ?
+#
 
 @jpipe_link("deployable:assembleConclusion")
 @jpipe(consume=[])
 def model_is_deployable() -> bool:
     """[conclusion] Model is deployable"""
-    pass
+    return True
 
 
 @jpipe_link("deployable:fair:c")
@@ -62,6 +90,6 @@ def accuracy_is_greater_than_0_8(produce: JpipeProduce) -> bool:
 @jpipe(produce=[], consume=[])
 def all_conditions_are_met(produce: JpipeProduce) -> bool:
     """[strategy] All conditions are met"""
-    pass
+    return True
 
 
