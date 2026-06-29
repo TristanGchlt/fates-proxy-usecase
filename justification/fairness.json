@@ -1,0 +1,44 @@
+{
+  "elements": [
+    {
+      "escaped": "model_is_fair",
+      "id": "fair:c",
+      "label": "Model is Fair",
+      "type": "conclusion"
+    },
+    {
+      "escaped": "demographic_parity_difference_is_less_than_0_2",
+      "id": "fair:dp_threshold",
+      "label": "Demographic Parity Difference is less than 0.2",
+      "type": "strategy"
+    },
+    {
+      "escaped": "model_is_available",
+      "id": "fair:model",
+      "label": "Model is available",
+      "type": "evidence"
+    },
+    {
+      "escaped": "test_dataset_is_available",
+      "id": "fair:dataset",
+      "label": "Test dataset is available",
+      "type": "evidence"
+    }
+  ],
+  "name": "fair",
+  "type": "justification",
+  "relations": [
+    {
+      "source": "fair:dp_threshold",
+      "target": "fair:c"
+    },
+    {
+      "source": "fair:model",
+      "target": "fair:dp_threshold"
+    },
+    {
+      "source": "fair:dataset",
+      "target": "fair:dp_threshold"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "elements": [
+    {
+      "escaped": "model_is_deployable",
+      "id": "deployable:assembleConclusion",
+      "label": "Model is deployable",
+      "type": "conclusion"
+    },
+    {
+      "escaped": "model_is_fair",
+      "id": "deployable:fair:c",
+      "label": "Model is Fair",
+      "type": "sub-conclusion"
+    },
+    {
+      "escaped": "demographic_parity_difference_is_less_than_0_2",
+      "id": "deployable:fair:dp_threshold",
+      "label": "Demographic Parity Difference is less than 0.2",
+      "type": "strategy"
+    },
+    {
+      "escaped": "model_is_available",
+      "id": "deployable:unified_0",
+      "label": "Model is available",
+      "type": "evidence"
+    },
+    {
+      "escaped": "test_dataset_is_available",
+      "id": "deployable:unified_1",
+      "label": "Test dataset is available",
+      "type": "evidence"
+    },
+    {
+      "escaped": "model_is_performant",
+      "id": "deployable:perf:c",
+      "label": "Model is Performant",
+      "type": "sub-conclusion"
+    },
+    {
+      "escaped": "accuracy_is_greater_than_0_8",
+      "id": "deployable:perf:acc_threshold",
+      "label": "Accuracy is greater than 0.8",
+      "type": "strategy"
+    },
+    {
+      "escaped": "all_conditions_are_met",
+      "id": "deployable:assembleStrategy",
+      "label": "All conditions are met",
+      "type": "strategy"
+    }
+  ],
+  "name": "deployable",
+  "type": "justification",
+  "relations": [
+    {
+      "source": "deployable:assembleStrategy",
+      "target": "deployable:assembleConclusion"
+    },
+    {
+      "source": "deployable:fair:dp_threshold",
+      "target": "deployable:fair:c"
+    },
+    {
+      "source": "deployable:perf:acc_threshold",
+      "target": "deployable:perf:c"
+    },
+    {
+      "source": "deployable:unified_0",
+      "target": "deployable:fair:dp_threshold"
+    },
+    {
+      "source": "deployable:unified_1",
+      "target": "deployable:fair:dp_threshold"
+    },
+    {
+      "source": "deployable:unified_0",
+      "target": "deployable:perf:acc_threshold"
+    },
+    {
+      "source": "deployable:unified_1",
+      "target": "deployable:perf:acc_threshold"
+    },
+    {
+      "source": "deployable:fair:c",
+      "target": "deployable:assembleStrategy"
+    },
+    {
+      "source": "deployable:perf:c",
+      "target": "deployable:assembleStrategy"
+    }
+  ]
+}

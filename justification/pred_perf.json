@@ -1,0 +1,44 @@
+{
+  "elements": [
+    {
+      "escaped": "model_is_performant",
+      "id": "perf:c",
+      "label": "Model is Performant",
+      "type": "conclusion"
+    },
+    {
+      "escaped": "accuracy_is_greater_than_0_8",
+      "id": "perf:acc_threshold",
+      "label": "Accuracy is greater than 0.8",
+      "type": "strategy"
+    },
+    {
+      "escaped": "model_is_available",
+      "id": "perf:model",
+      "label": "Model is available",
+      "type": "evidence"
+    },
+    {
+      "escaped": "test_dataset_is_available",
+      "id": "perf:dataset",
+      "label": "Test dataset is available",
+      "type": "evidence"
+    }
+  ],
+  "name": "perf",
+  "type": "justification",
+  "relations": [
+    {
+      "source": "perf:acc_threshold",
+      "target": "perf:c"
+    },
+    {
+      "source": "perf:model",
+      "target": "perf:acc_threshold"
+    },
+    {
+      "source": "perf:dataset",
+      "target": "perf:acc_threshold"
+    }
+  ]
+}
