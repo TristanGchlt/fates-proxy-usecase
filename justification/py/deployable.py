@@ -31,17 +31,18 @@ evidence_data = {
 #
 
 @jpipe_link("deployable:assembleConclusion")
-@jpipe(consume=[])
-def model_is_deployable() -> bool:
+@jpipe(consume=['deployable'])
+def model_is_deployable(deployable: bool) -> bool:
     """[conclusion] Model is deployable"""
-    pass
+    return deployable
 
 
 @jpipe_link("deployable:fair:c")
-@jpipe(produce=[], consume=[])
+@jpipe(produce=['fair'], consume=[])
 def model_is_fair(produce: JpipeProduce) -> bool:
     """[sub-conclusion] Model is Fair"""
-    pass
+    produce('fair', True)
+    return True
 
 
 @jpipe_link("deployable:fair:dp_threshold")
@@ -92,10 +93,11 @@ def test_dataset_is_available(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:perf:c")
-@jpipe(produce=[], consume=[])
+@jpipe(produce=['performant'], consume=[])
 def model_is_performant(produce: JpipeProduce) -> bool:
     """[sub-conclusion] Model is Performant"""
-    pass
+    produce('performant', True)
+    return True
 
 
 @jpipe_link("deployable:perf:acc_threshold")
@@ -121,9 +123,12 @@ def accuracy_is_greater_than_0_8(model_weights: str, model_type: str,
 
 
 @jpipe_link("deployable:assembleStrategy")
-@jpipe(produce=[], consume=[])
-def all_conditions_are_met(produce: JpipeProduce) -> bool:
+@jpipe(produce=['deployable'], consume=['fair', 'performant'])
+def all_conditions_are_met(fair: bool, performant: bool, 
+                           produce: JpipeProduce) -> bool:
     """[strategy] All conditions are met"""
-    return True
+    if fair and performant :
+        produce('deployable', True)
+    return fair and performant
 
 

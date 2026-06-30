@@ -48,5 +48,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: v3.4.1
           python_path: "poetry run python"
-          library: |
-            justification/py/deployable.py
+          library: justification/py/deployable.py
