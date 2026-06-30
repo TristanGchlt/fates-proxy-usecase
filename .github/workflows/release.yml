@@ -12,7 +12,7 @@ on:
   pull_request:
 
 env:
-  JUSTIFICATION_MODEL: "./justification/jd/deployable.jd"
+  JUSTIFICATION_MODEL: "./justification/json/deployable.json"
 
 jobs:
 
