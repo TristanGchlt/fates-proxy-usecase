@@ -45,7 +45,7 @@ jobs:
         uses: jpipe-mcscert/jpipe-runner@v3.4.1
         with:
           jd_file: ${{ env.JUSTIFICATION_MODEL }}
-          github-token: ${{ secrects.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           version: v3.4.1
           python_path: "poetry run python"
           library: |
