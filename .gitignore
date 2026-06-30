@@ -6,8 +6,8 @@ data/processed/*
 !data/processed/.gitkeep
 
 # Split data
-data/split/*
-!data/split/.gitkeep
+# data/split/*
+# !data/split/.gitkeep
 
 # Pycache
 __pycache__/
