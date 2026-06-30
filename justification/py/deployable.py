@@ -14,20 +14,13 @@ import pandas as pd
 HERE = Path(__file__).resolve().parent
 PROJECT_ROOT = HERE.parent.parent
 
-# ces variables globales de l'ancienne version vont être géré par le "produce"
-# FAIRNESS_THRESHOLD: float | None = None
-# FAIRNESS_THRESHOLD_TYPE: str | None = None
-# MODEL: object | None = None
-# X_TEST: pd.DataFrame | None = None
-# Y_TEST: pd.DataFrame | None = None
-# FAIRNESS_MEASURE_FUNCTION: str | None = None
-# FAIRNESS_MEASURE: float | None = None
-
-# Le but est de retourner true ou false dans chaque fonction
-# il me semble qu'en général :
-# une evidence va faire un ou des "produce"
-# une stratégie va faire un ou des "consume" et éventuellement un ou des "produce"
-# une conclusion va simplement retourner True sans traitement
+evidence_data = {
+    "model_file" : "./model/model.pkl",
+    "model_type" : "./model/model_type.txt",
+    "x_test_file" : "./data/split/X_test.csv",
+    "y_test_file" : "./data/split/y_test.csv",
+    "p_test_file" : "./data/split/p_test.csv"
+}
 
 # Questions :
 #
@@ -41,7 +34,7 @@ PROJECT_ROOT = HERE.parent.parent
 @jpipe(consume=[])
 def model_is_deployable() -> bool:
     """[conclusion] Model is deployable"""
-    return True
+    pass
 
 
 @jpipe_link("deployable:fair:c")
@@ -52,24 +45,50 @@ def model_is_fair(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:fair:dp_threshold")
-@jpipe(produce=[], consume=[])
-def demographic_parity_difference_is_less_than_0_2(produce: JpipeProduce) -> bool:
+@jpipe(produce=[], consume=['model_weights', 'model_type', 'X_test', 'y_test', 'p_test'])
+def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_type: str, 
+                                                   X_test: str, y_test: str, p_test: str, 
+                                                   produce: JpipeProduce) -> bool:
     """[strategy] Demographic Parity Difference is less than 0.2"""
-    pass
+    from src.models.utils import load_model
+    from src.metrics.fairness import demographic_parity
+    # load the model
+    model = load_model(model_weights, model_type)
+    # load the test data
+    data = {}
+    data["X_test"] = pd.read_csv(X_test)
+    data["y_test"] = pd.read_csv(y_test)
+    data["p_test"] = pd.read_csv(p_test)
+    # predict y based on x_test
+    data["y_pred"] = model.predict(X_test)
+    # compute accuracy based on y_test and y_pred
+    dp = demographic_parity(data)
+    threshold = 0.2
+    return dp < threshold
 
 
 @jpipe_link("deployable:unified_0")
-@jpipe(produce=[])
+@jpipe(produce=['model_weights', 'model_type'])
 def model_is_available(produce: JpipeProduce) -> bool:
     """[evidence] Model is available"""
-    pass
+    if (found_m := 'model_file' in evidence_data):
+        produce('model_weights', evidence_data['model_file'])
+    if (found_t := 'model_type' in evidence_data):
+        produce('model_type', evidence_data['model_type'])
+    return found_m and found_t
 
 
 @jpipe_link("deployable:unified_1")
-@jpipe(produce=[])
+@jpipe(produce=['X_test', 'y_test', 'p_test'])
 def test_dataset_is_available(produce: JpipeProduce) -> bool:
     """[evidence] Test dataset is available"""
-    pass
+    if (found_x := 'x_test_file' in evidence_data):
+        produce('X_test', evidence_data['x_test_file'])
+    if (found_y := 'y_test_file' in evidence_data):
+        produce('y_test', evidence_data['y_test_file'])  
+    if (found_p := 'p_test_file' in evidence_data):
+        produce('p_test', evidence_data['p_test_file'])  
+    return found_x and found_y and found_p
 
 
 @jpipe_link("deployable:perf:c")
@@ -80,10 +99,25 @@ def model_is_performant(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:perf:acc_threshold")
-@jpipe(produce=[], consume=[])
-def accuracy_is_greater_than_0_8(produce: JpipeProduce) -> bool:
+@jpipe(produce=[], consume=['model_weights', 'model_type', 'X_test', 'y_test'])
+def accuracy_is_greater_than_0_8(model_weights: str, model_type: str, 
+                                 X_test: str, y_test: str, 
+                                 produce: JpipeProduce) -> bool:
     """[strategy] Accuracy is greater than 0.8"""
-    pass
+    from src.models.utils import load_model
+    from src.metrics.predictive_perf import accuracy
+    # load the model
+    model = load_model(model_weights, model_type)
+    # load the test data
+    data = {}
+    data["X_test"] = pd.read_csv(X_test)
+    data["y_test"] = pd.read_csv(y_test)
+    # predict y based on x_test
+    data["y_pred"] = model.predict(X_test)
+    # compute accuracy based on y_test and y_pred
+    acc = accuracy(data)
+    threshold = 0.8
+    return acc > threshold
 
 
 @jpipe_link("deployable:assembleStrategy")

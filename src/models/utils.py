@@ -22,3 +22,13 @@ def save_model_type(model_type : str, path : str) :
     with open(model_type_path, "w") as f:
         f.write(model_type)
     return None
+
+def load_model(model_path, model_type) :
+    loaders={
+        "Random Forest Classifier" : load_pickle_model
+    }
+    return loaders[model_type](model_path)
+
+def load_pickle_model(model_path) :
+    import pickle
+    return pickle.load(open(model_path, 'rb'))
