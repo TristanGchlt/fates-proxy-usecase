@@ -14,7 +14,7 @@ def save_pickle_model(model, model_path) :
         pickle.dump(model, f)
     return None
 
-def predict(model, data) :
+def predict(model, model_type, data) :
     return model.predict(data['X_test']) # Cette fonction doit devenir dynamique selon le type de model
 
 def save_model_type(model_type : str, path : str) :

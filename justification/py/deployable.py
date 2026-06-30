@@ -52,8 +52,9 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
                                                    produce: JpipeProduce) -> bool:
     """[strategy] Demographic Parity Difference is less than 0.2"""
     from src.metrics.fairness import demographic_parity
+    from src.models.utils import predict
     # predict y based on x_test
-    data["y_pred"] = model_weights.predict(data["X_test"])
+    data["y_pred"] = predict(model_weights, model_type, data)
     # compute accuracy based on y_test and y_pred
     dp = demographic_parity(data)
     threshold = 0.2
@@ -105,8 +106,9 @@ def accuracy_is_greater_than_0_8(model_weights: str, model_type: str,
                                  produce: JpipeProduce) -> bool:
     """[strategy] Accuracy is greater than 0.8"""
     from src.metrics.predictive_perf import accuracy
+    from src.models.utils import predict
     # predict y based on x_test
-    data["y_pred"] = model_weights.predict(data['X_test'])
+    data["y_pred"] = predict(model_weights, model_type, data)
     # compute accuracy based on y_test and y_pred
     acc = accuracy(data)
     threshold = 0.8
