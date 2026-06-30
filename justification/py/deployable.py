@@ -51,12 +51,9 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
                                                    data, 
                                                    produce: JpipeProduce) -> bool:
     """[strategy] Demographic Parity Difference is less than 0.2"""
-    from src.models.utils import load_model
     from src.metrics.fairness import demographic_parity
-    # load the model
-    model = load_model(model_weights, model_type)
     # predict y based on x_test
-    data["y_pred"] = model.predict(data["X_test"])
+    data["y_pred"] = model_weights.predict(data["X_test"])
     # compute accuracy based on y_test and y_pred
     dp = demographic_parity(data)
     threshold = 0.2
@@ -67,11 +64,15 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
 @jpipe(produce=['model_weights', 'model_type'])
 def model_is_available(produce: JpipeProduce) -> bool:
     """[evidence] Model is available"""
-    if (found_m := 'model_file' in evidence_data):
-        produce('model_weights', evidence_data['model_file'])
-    if (found_t := 'model_type' in evidence_data):
-        produce('model_type', evidence_data['model_type'])
-    return found_m and found_t
+    from src.models.utils import load_model
+    if ('model_type' in evidence_data):
+        with open(evidence_data['model_type'], 'r', encoding="utf-8") as f:
+            model_type = f.read()
+        produce('model_type', model_type)
+        if (found := 'model_file' in evidence_data):
+            model = load_model(evidence_data["model_file"], model_type)
+            produce('model_weights', model)
+    return found
 
 
 @jpipe_link("deployable:unified_1")
@@ -103,12 +104,9 @@ def accuracy_is_greater_than_0_8(model_weights: str, model_type: str,
                                  data, 
                                  produce: JpipeProduce) -> bool:
     """[strategy] Accuracy is greater than 0.8"""
-    from src.models.utils import load_model
     from src.metrics.predictive_perf import accuracy
-    # load the model
-    model = load_model(model_weights, model_type)
     # predict y based on x_test
-    data["y_pred"] = model.predict(data['X_test'])
+    data["y_pred"] = model_weights.predict(data['X_test'])
     # compute accuracy based on y_test and y_pred
     acc = accuracy(data)
     threshold = 0.8
