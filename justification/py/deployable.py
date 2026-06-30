@@ -57,8 +57,9 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
     data["y_pred"] = predict(model_weights, model_type, data)
     # compute accuracy based on y_test and y_pred
     dp = demographic_parity(data)
-    threshold = 0.2
-    return dp < threshold
+    if dp >= 0.2 :
+        return False 
+    return True
 
 
 @jpipe_link("deployable:unified_0")
@@ -111,8 +112,9 @@ def accuracy_is_greater_than_0_8(model_weights: str, model_type: str,
     data["y_pred"] = predict(model_weights, model_type, data)
     # compute accuracy based on y_test and y_pred
     acc = accuracy(data)
-    threshold = 0.8
-    return acc > threshold
+    if acc <= 0.8 :
+        return False
+    return True
 
 
 @jpipe_link("deployable:assembleStrategy")
