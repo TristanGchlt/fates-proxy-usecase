@@ -46,22 +46,17 @@ def model_is_fair(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:fair:dp_threshold")
-@jpipe(produce=[], consume=['model_weights', 'model_type', 'X_test', 'y_test', 'p_test'])
+@jpipe(produce=[], consume=['model_weights', 'model_type', 'data'])
 def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_type: str, 
-                                                   X_test: str, y_test: str, p_test: str, 
+                                                   data, 
                                                    produce: JpipeProduce) -> bool:
     """[strategy] Demographic Parity Difference is less than 0.2"""
     from src.models.utils import load_model
     from src.metrics.fairness import demographic_parity
     # load the model
     model = load_model(model_weights, model_type)
-    # load the test data
-    data = {}
-    data["X_test"] = pd.read_csv(X_test)
-    data["y_test"] = pd.read_csv(y_test)
-    data["p_test"] = pd.read_csv(p_test)
     # predict y based on x_test
-    data["y_pred"] = model.predict(X_test)
+    data["y_pred"] = model.predict(data["X_test"])
     # compute accuracy based on y_test and y_pred
     dp = demographic_parity(data)
     threshold = 0.2
@@ -80,15 +75,17 @@ def model_is_available(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:unified_1")
-@jpipe(produce=['X_test', 'y_test', 'p_test'])
+@jpipe(produce=['data'])
 def test_dataset_is_available(produce: JpipeProduce) -> bool:
     """[evidence] Test dataset is available"""
+    data = {}
     if (found_x := 'x_test_file' in evidence_data):
-        produce('X_test', evidence_data['x_test_file'])
+        data["X_test"] = pd.read_csv(evidence_data['x_test_file'])
     if (found_y := 'y_test_file' in evidence_data):
-        produce('y_test', evidence_data['y_test_file'])  
-    if (found_p := 'p_test_file' in evidence_data):
-        produce('p_test', evidence_data['p_test_file'])  
+        data["y_test"] = pd.read_csv(evidence_data['y_test_file'])
+    if (found_p := 'p_test_file' in evidence_data):  
+        data["p_test"] = pd.read_csv(evidence_data['p_test_file'])
+    produce('data', data)
     return found_x and found_y and found_p
 
 
@@ -101,21 +98,17 @@ def model_is_performant(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:perf:acc_threshold")
-@jpipe(produce=[], consume=['model_weights', 'model_type', 'X_test', 'y_test'])
+@jpipe(produce=[], consume=['model_weights', 'model_type', 'data'])
 def accuracy_is_greater_than_0_8(model_weights: str, model_type: str, 
-                                 X_test: str, y_test: str, 
+                                 data, 
                                  produce: JpipeProduce) -> bool:
     """[strategy] Accuracy is greater than 0.8"""
     from src.models.utils import load_model
     from src.metrics.predictive_perf import accuracy
     # load the model
     model = load_model(model_weights, model_type)
-    # load the test data
-    data = {}
-    data["X_test"] = pd.read_csv(X_test)
-    data["y_test"] = pd.read_csv(y_test)
     # predict y based on x_test
-    data["y_pred"] = model.predict(X_test)
+    data["y_pred"] = model.predict(data['X_test'])
     # compute accuracy based on y_test and y_pred
     acc = accuracy(data)
     threshold = 0.8
