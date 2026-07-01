@@ -49,3 +49,5 @@ jobs:
           version: v3.4.1
           python_path: "poetry run python"
           library: justification/py/deployable.py
+          embed_image: "true"
+          image_brach: "diagram_images"
