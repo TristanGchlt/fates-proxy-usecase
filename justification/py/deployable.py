@@ -57,7 +57,7 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
     data["y_pred"] = predict(model_weights, model_type, data)
     # compute accuracy based on y_test and y_pred
     dp = demographic_parity(data)
-    if dp >= 0.2 :
+    if dp >= 0.02 :
         return False 
     return True
 
