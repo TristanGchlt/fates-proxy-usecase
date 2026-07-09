@@ -35,13 +35,16 @@ def run_pipeline() :
         # Nettoyage et préparation des données
         ####
 
+        # Nettoyage : Adresse du fichier des données brut et écrit le fichier de données nettoyées.
         clean(raw_data_file=RAW_DATA_FILE,
               output_path=CLEAN_DATA_PATH)
         
+        # Préparation des données : Récupère le fichier des données nettoyées, applique les transformations selon la config, écrit le fichier des données splitées.
         split_logs = split(config_path=CONFIG_PATH,
                             processed_data_path=CLEAN_DATA_PATH,
                             split_path=SPLIT_PATH)
         
+        # Suivi de la config dans mlflow
         for key, value in split_logs.items():
             mlflow.log_param(key, value)
 
@@ -49,12 +52,18 @@ def run_pipeline() :
         # Entrainement et évaluation du modèle
         ####
         
+        # Récupère les données split et entraine le modele
         model_logs = train(config_path=CONFIG_PATH,
                             split_path=SPLIT_PATH)
         
+        # Suivi des paramètres du modèles dans mlflow
         mlflow.log_params(model_logs['hyperparameters'])
+
+        # Evaluation du modele et suivi dans mlflow
         for metric, value in model_logs["measures"].items():
             mlflow.log_metric(metric, value)
+
+        # Suivi du modele lui même dans mlflow
         mlflow.sklearn.log_model(model_logs['model'], 
                                  name="model")
         
