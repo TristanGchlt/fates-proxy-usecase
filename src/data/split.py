@@ -17,8 +17,6 @@ def train_test_stratified(dataset, test_size, protected, seed) :
     train, test = train_test_split(dataset, test_size=test_size, random_state=seed, shuffle=True, stratify=dataset[protected])
     return train, test
 
-
-
 def x_y_p(sample, target, protected) :
     
     X = sample.drop(target, axis=1)
@@ -26,3 +24,6 @@ def x_y_p(sample, target, protected) :
     p = sample[protected]
 
     return X, y, p
+
+def hide_p(X, protected) :
+    return X.drop(protected, axis=1)

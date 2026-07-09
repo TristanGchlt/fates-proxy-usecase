@@ -5,7 +5,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
 from src.utils import load_csv, save_csv, read_config
-from src.data.split import train_test, x_y_p
+from src.data.split import train_test, x_y_p, hide_p
 from src.data.data_preparation import resample
 
 PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
@@ -35,6 +35,10 @@ def main(config_path=CONFIG_PATH,
     X_test, y_test, p_test = x_y_p(test, target_feature, protected_feature)
 
     X_train, y_train, p_train = resample(X_train, y_train, p_train, balance_strategy, balance_seed)
+
+    if config["f_hide_protected"] : 
+        X_train = hide_p(X_train, protected_feature)
+        X_test = hide_p(X_test, protected_feature)
 
     save_csv(X_train, split_path / "X_train.csv") 
     save_csv(y_train, split_path / "y_train.csv")
