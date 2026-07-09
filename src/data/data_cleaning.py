@@ -37,3 +37,38 @@ def remove_columns(dataset : pd.DataFrame, columns : list[str]) -> pd.DataFrame 
     dataset_clean = dataset_clean.drop(columns=columns)
 
     return dataset_clean
+
+def clean(dataset: pd.DataFrame) -> pd.DataFrame :
+    # Missing values replacement
+    dataset = nullify_values(dataset, "?")
+    dataset = fill_missing_values(dataset, fill_value="Unknown")
+
+    # From qualitative to binary
+    dataset = create_binary_column(dataset, "sex", "Male")
+    dataset = create_binary_column(dataset, "income", ">50K")
+    categorical_columns = [
+        'workclass',
+        'marital.status',
+        'occupation',
+        'relationship',
+        'native.country'
+    ]
+    dataset = create_dummy_columns(dataset, categorical_columns)
+
+    # Type transformation
+    dataset = convert_columns_type(dataset, "int", "float64")
+
+    # Agregated feature
+    dataset['capital_diff'] = dataset['capital.gain'] - dataset['capital.loss']
+
+    # Columns to be removed
+    columns_to_be_removed = [
+        'race',
+        'fnlwgt',
+        'education',
+        'capital.gain',
+        'capital.loss'
+    ]
+    dataset = remove_columns(dataset, columns_to_be_removed)
+
+    return dataset
