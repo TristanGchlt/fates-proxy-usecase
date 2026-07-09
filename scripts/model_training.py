@@ -18,13 +18,8 @@ def main(
         split_path = SPLIT_PATH,
         ) :
     
-    config = read_config(config_path)
-    model_type = config['model_type']
-    hyperparameters = config['model_hyperparameters']
-    metrics = config['metrics']
-    
+    # LOAD
     data = {}
-
     for name in ["X_train", 
                  "y_train", 
                  "p_train",
@@ -33,10 +28,19 @@ def main(
                  "p_test"] :
         data[name] = load_csv(split_path / f"{name}.csv")
 
+    
+    # TRAIN
+    config = read_config(config_path)
+    model_type = config['model_type']
+    hyperparameters = config['model_hyperparameters']
+    metrics = config['metrics']
+
     model = train(model_type, data, hyperparameters)
 
+    # PRED
     data['y_pred'] = predict(model, data)
 
+    # EVALUATE
     measures = compute_measures(data, metrics)
 
     return {
