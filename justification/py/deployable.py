@@ -51,9 +51,14 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
     from src.metrics.fairness import demographic_parity
     from src.models.utils import predict
     # predict y based on x_test
-    test_data["y_pred"] = predict(model_weights, model_type, test_data)
-    # compute accuracy based on y_test and y_pred
-    dp = demographic_parity(test_data)
+    y_pred = predict(model_weights, model_type, test_data)
+    data={
+        "y_pred" : y_pred,
+        "y_test" : test_data["y_test"],
+        "p_test" : test_data["p_test"]
+    }
+    # compute dp based on y_test and y_pred
+    dp = demographic_parity(data)
     if dp >= 0.2 :
         return False 
     return True
