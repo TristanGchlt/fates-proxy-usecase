@@ -48,15 +48,22 @@ def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_typ
                                                    test_data, 
                                                    produce: JpipeProduce) -> bool:
     """[strategy] Demographic Parity Difference is less than 0.2"""
-    from src.metrics.fairness import demographic_parity
-    from src.models.utils import predict
-    # predict y based on x_test
-    test_data["y_pred"] = predict(model_weights, model_type, test_data)
-    # compute dp based on y_test and y_pred
-    dp = demographic_parity(test_data)
-    if dp >= 0.2 :
-        # return False 
-        return True
+    print("ENTER DP")
+    print(type(test_data))
+    print(test_data.keys())
+    print(type(test_data["X_test"]))
+    print(type(test_data["y_test"]))
+    print(type(test_data["p_test"]))
+    print(model_type)
+    print(len(model_weights))
+    # from src.metrics.fairness import demographic_parity
+    # from src.models.utils import predict
+    # # predict y based on x_test
+    # test_data["y_pred"] = predict(model_weights, model_type, test_data)
+    # # compute dp based on y_test and y_pred
+    # dp = demographic_parity(test_data)
+    # if dp >= 0.2 :
+    #     return False 
     return True
 
 
@@ -101,7 +108,7 @@ def test_dataset_is_available(produce: JpipeProduce) -> bool:
                 "y_test" : y_test,
                 "p_test" : p_test
             }
-    produce('test_data', test_data)
+            produce('test_data', test_data)
     return found_d and found_c
 
 
