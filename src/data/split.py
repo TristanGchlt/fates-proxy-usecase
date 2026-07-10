@@ -1,5 +1,5 @@
 from sklearn.model_selection import train_test_split
-
+from .data_preparation import resample
 
 
 def train_test(dataset, test_size, protected, strategy, seed) :
@@ -27,3 +27,18 @@ def x_y_p(sample, target, protected) :
 
 def hide_p(X, protected) :
     return X.drop(protected, axis=1)
+
+
+def split(dataset, test_size, protected_feature, split_strategy, seed, target_feature, balance_strategy, balance_seed, hide_protected):
+    train, test = train_test(dataset, test_size, protected_feature, split_strategy, seed)
+
+    X_train, y_train, p_train = x_y_p(train, target_feature, protected_feature)
+    X_test, y_test, p_test = x_y_p(test, target_feature, protected_feature)
+
+    X_train, y_train, p_train = resample(X_train, y_train, p_train, balance_strategy, balance_seed)
+
+    if hide_protected : 
+        X_train = hide_p(X_train, protected_feature)
+        X_test = hide_p(X_test, protected_feature)
+
+    return X_train, y_train, p_train, X_test, y_test, p_test

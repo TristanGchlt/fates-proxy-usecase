@@ -5,8 +5,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
 from src.utils import load_csv, save_csv, read_config
-from src.data.split import train_test, x_y_p, hide_p
-from src.data.data_preparation import resample
+from src.data.split import split
 
 PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
 CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
@@ -17,28 +16,27 @@ def main(config_path=CONFIG_PATH,
          processed_data_path=PROCESSED_DATA_PATH,
          split_path=SPLIT_PATH
          ) :
-    
-    config = read_config(config_path)
-    test_size=config['test_size']
-    seed = config['split_random_seed']
-    target_feature = config['target_feature']
-    protected_feature = config['protected_feature']
-    split_strategy = config['f_split_strategy']
-    balance_strategy = config['f_balance']
-    balance_seed = config['f_balance_seed']
+
+    # LOAD
 
     dataset = load_csv(processed_data_path)
+    
 
-    train, test = train_test(dataset, test_size, protected_feature, split_strategy, seed)
+    # SPLIT
 
-    X_train, y_train, p_train = x_y_p(train, target_feature, protected_feature)
-    X_test, y_test, p_test = x_y_p(test, target_feature, protected_feature)
+    config = read_config(config_path)
 
-    X_train, y_train, p_train = resample(X_train, y_train, p_train, balance_strategy, balance_seed)
+    X_train, y_train, p_train, X_test, y_test, p_test = split(dataset, 
+                                                              test_size = config['test_size'], 
+                                                              protected_feature = config['protected_feature'], 
+                                                              split_strategy = config['f_split_strategy'], 
+                                                              seed = config['split_random_seed'], 
+                                                              target_feature = config['target_feature'], 
+                                                              balance_strategy = config['f_balance'], 
+                                                              balance_seed = config['f_balance_seed'], 
+                                                              hide_protected = config["f_hide_protected"])
 
-    if config["f_hide_protected"] : 
-        X_train = hide_p(X_train, protected_feature)
-        X_test = hide_p(X_test, protected_feature)
+    # SAVE
 
     save_csv(X_train, split_path / "X_train.csv") 
     save_csv(y_train, split_path / "y_train.csv")
@@ -48,12 +46,12 @@ def main(config_path=CONFIG_PATH,
     save_csv(p_test, split_path / "p_test.csv")
 
     return {
-        "test_size" : test_size,
-        "split_seed" : seed,
-        "target" : target_feature,
-        "protected" : protected_feature,
-        "split_strategy" : split_strategy,
-        "balance_strategy" : balance_strategy
+        "X_train" : X_train,
+        "y_train" : y_train,
+        "p_train" : p_train,
+        "X_test" : X_test,
+        "y_test" : y_test,
+        "p_test" : p_test
     }
 
 if __name__ == "__main__" :
