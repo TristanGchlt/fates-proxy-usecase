@@ -18,7 +18,7 @@ RAW_DATA_FILE = PROJECT_ROOT / "data" / "raw" / "data.csv"
 
 CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
 
-PROD_PATH = PROJECT_ROOT / "model"
+MODEL_PATH = PROJECT_ROOT / "model"
 
 def run_pipeline() :
 
@@ -102,11 +102,10 @@ def run_pipeline() :
     ####
     # Replacement du modèle principal, celui évalué en intégration continue
     ####
-        
-    if config['prod'] :
-        clean_folder(PROD_PATH)
-        save_model(model, model_type, PROD_PATH)
-        save_model_type(model_type, PROD_PATH)
+
+    clean_folder(MODEL_PATH)
+    save_model(model, model_type, MODEL_PATH)
+    save_model_type(model_type, MODEL_PATH)
     
     return 0
 
