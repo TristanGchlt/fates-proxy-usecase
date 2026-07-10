@@ -45,15 +45,15 @@ def model_is_fair(produce: JpipeProduce) -> bool:
 @jpipe_link("deployable:fair:dp_threshold")
 @jpipe(produce=[], consume=['model_weights', 'model_type', 'test_data'])
 def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_type: str, 
-                                                   data, 
+                                                   test_data, 
                                                    produce: JpipeProduce) -> bool:
     """[strategy] Demographic Parity Difference is less than 0.2"""
     from src.metrics.fairness import demographic_parity
     from src.models.utils import predict
     # predict y based on x_test
-    data["y_pred"] = predict(model_weights, model_type, data)
+    test_data["y_pred"] = predict(model_weights, model_type, test_data)
     # compute accuracy based on y_test and y_pred
-    dp = demographic_parity(data)
+    dp = demographic_parity(test_data)
     if dp >= 0.2 :
         return False 
     return True
@@ -115,15 +115,15 @@ def model_is_performant(produce: JpipeProduce) -> bool:
 @jpipe_link("deployable:perf:acc_threshold")
 @jpipe(produce=[], consume=['model_weights', 'model_type', 'test_data'])
 def accuracy_is_greater_than_0_8(model_weights: str, model_type: str, 
-                                 data, 
+                                 test_data, 
                                  produce: JpipeProduce) -> bool:
     """[strategy] Accuracy is greater than 0.8"""
     from src.metrics.predictive_perf import accuracy
     from src.models.utils import predict
     # predict y based on x_test
-    data["y_pred"] = predict(model_weights, model_type, data)
+    test_data["y_pred"] = predict(model_weights, model_type, test_data)
     # compute accuracy based on y_test and y_pred
-    acc = accuracy(data)
+    acc = accuracy(test_data)
     if acc <= 0.8 :
         return False
     return True
