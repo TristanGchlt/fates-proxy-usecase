@@ -5,7 +5,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
 from src.utils import load_csv, save_csv, read_config
-from src.data.split import split
+from src.data.data_preparation import split
 
 PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "processed_data.csv"
 CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
