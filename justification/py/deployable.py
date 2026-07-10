@@ -17,18 +17,15 @@ PROJECT_ROOT = HERE.parent.parent
 evidence_data = {
     "model_file" : "./model/model.pkl",
     "model_type" : "./model/model_type.txt",
-    "x_test_file" : "./data/split/X_test.csv",
-    "y_test_file" : "./data/split/y_test.csv",
-    "p_test_file" : "./data/split/p_test.csv"
+    "raw_data_file" : "./data/raw/data.csv",
+    "config_file" : "./config/config.yaml"
 }
 
 # Questions :
 #
 # Pourquoi les conclusions apparaissent dans le squelette de code ? 
 # Dans quels cas on va avoir des test sur les conclusions ou sous conclusions, qui ne pourraient pas être déportés sur la stratégie qui les précède.
-#
-# Pourquoi la conclusion finale est la seule qui n'a pas le JpipeProduce en argument ?
-#
+
 
 @jpipe_link("deployable:assembleConclusion")
 @jpipe(consume=['deployable'])
@@ -46,7 +43,7 @@ def model_is_fair(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:fair:dp_threshold")
-@jpipe(produce=[], consume=['model_weights', 'model_type', 'data'])
+@jpipe(produce=[], consume=['model_weights', 'model_type', 'test_data'])
 def demographic_parity_difference_is_less_than_0_2(model_weights: str, model_type: str, 
                                                    data, 
                                                    produce: JpipeProduce) -> bool:
@@ -78,18 +75,33 @@ def model_is_available(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:unified_1")
-@jpipe(produce=['data'])
+@jpipe(produce=['test_data'])
 def test_dataset_is_available(produce: JpipeProduce) -> bool:
     """[evidence] Test dataset is available"""
-    data = {}
-    if (found_x := 'x_test_file' in evidence_data):
-        data["X_test"] = pd.read_csv(evidence_data['x_test_file'])
-    if (found_y := 'y_test_file' in evidence_data):
-        data["y_test"] = pd.read_csv(evidence_data['y_test_file'])
-    if (found_p := 'p_test_file' in evidence_data):  
-        data["p_test"] = pd.read_csv(evidence_data['p_test_file'])
-    produce('data', data)
-    return found_x and found_y and found_p
+    from src.data.data_preparation import split
+    from src.data.data_cleaning import clean
+    from src.utils import load_csv, read_config
+    if (found_d := 'raw_data_file' in evidence_data):
+        raw_data = load_csv(evidence_data["raw_data_file"])
+        clean_data = clean(raw_data)
+        if (found_c := 'config_file' in evidence_data):
+            config = read_config(evidence_data["config_file"])
+            X_train, y_train, p_train, X_test, y_test, p_test = split(clean_data, 
+                                                                test_size = config['test_size'], 
+                                                                protected_feature = config['protected_feature'], 
+                                                                split_strategy = config['f_split_strategy'], 
+                                                                seed = config['split_random_seed'], 
+                                                                target_feature = config['target_feature'], 
+                                                                balance_strategy = config['f_balance'], 
+                                                                balance_seed = config['f_balance_seed'], 
+                                                                hide_protected = config["f_hide_protected"])
+            test_data = {
+                "X_test" : X_test,
+                "y_test" : y_test,
+                "p_test" : p_test
+            }
+    produce('test_data', test_data)
+    return found_d and found_c
 
 
 @jpipe_link("deployable:perf:c")
@@ -101,7 +113,7 @@ def model_is_performant(produce: JpipeProduce) -> bool:
 
 
 @jpipe_link("deployable:perf:acc_threshold")
-@jpipe(produce=[], consume=['model_weights', 'model_type', 'data'])
+@jpipe(produce=[], consume=['model_weights', 'model_type', 'test_data'])
 def accuracy_is_greater_than_0_8(model_weights: str, model_type: str, 
                                  data, 
                                  produce: JpipeProduce) -> bool:
