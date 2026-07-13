@@ -12,5 +12,5 @@ def resample(X, y, p, balance_strategy, seed) :
 def undersampling(X, y, p, seed) :
     rus = RandomUnderSampler(random_state=seed)
     X, p = rus.fit_resample(X, p)
-    y = y[rus.sample_indices_]
+    y = y.iloc[rus.sample_indices_]
     return X, y, p

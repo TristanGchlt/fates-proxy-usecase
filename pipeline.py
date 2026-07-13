@@ -20,13 +20,15 @@ CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
 
 MODEL_PATH = PROJECT_ROOT / "model"
 
-def run_pipeline() :
+config = read_config(CONFIG_PATH)
+
+def run_pipeline(config=config, write=True) :
 
     # Préparation du tracking
     mlflow.set_experiment("my_experiment")
 
     # Récupération des paramètres
-    config = read_config(CONFIG_PATH)
+    
     model_name = config['model_name']
 
     # Chargement des données brutes
@@ -50,7 +52,8 @@ def run_pipeline() :
                                                               target_feature = config['target_feature'], 
                                                               balance_strategy = config['f_balance'], 
                                                               balance_seed = config['f_balance_seed'], 
-                                                              hide_protected = config["f_hide_protected"])
+                                                              hide_protected = config["f_hide_protected"],
+                                                              hide_proxies = config['f_hide_proxies'])
         
 
         # Suivi de la config dans mlflow
@@ -62,7 +65,8 @@ def run_pipeline() :
             "target_feature" : config['target_feature'], 
             "balance_strategy" : config['f_balance'], 
             "balance_seed" : config['f_balance_seed'], 
-            "hide_protected" : config["f_hide_protected"]
+            "hide_protected" : config["f_hide_protected"],
+            "hide_proxies" : config["f_hide_proxies"]
         }
         for key, value in split_logs.items():
             mlflow.log_param(key, value)
@@ -103,9 +107,10 @@ def run_pipeline() :
     # Replacement du modèle principal, celui évalué en intégration continue
     ####
 
-    clean_folder(MODEL_PATH)
-    save_model(model, model_type, MODEL_PATH)
-    save_model_type(model_type, MODEL_PATH)
+    if write :
+        clean_folder(MODEL_PATH)
+        save_model(model, model_type, MODEL_PATH)
+        save_model_type(model_type, MODEL_PATH)
     
     return 0
 

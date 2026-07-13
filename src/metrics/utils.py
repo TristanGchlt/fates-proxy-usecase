@@ -7,7 +7,8 @@ METRICS_FUNC = {
     "accuracy" : perf.accuracy,
     "f1_score" : perf.f1,
     "demographic_parity" : fairness.demographic_parity,
-    "equalized_odds" : fairness.equalized_odds
+    "equalized_odds" : fairness.equalized_odds,
+    "disparate_impact" : fairness.disparate_impact
 }
 
 def compute_measures(data, metrics) :
