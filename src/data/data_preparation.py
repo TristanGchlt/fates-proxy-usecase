@@ -26,17 +26,19 @@ def x_y_p(sample, target, protected) :
 def hide_p(X, protected) :
     return X.drop(protected, axis=1)
 
-def hide_p_proxies(dataset, protected, threshold=0.2, method="pearson") :
+def hide_p_proxies(dataset, protected, target, threshold=0.2, method="pearson") :
     numeric_data = dataset.select_dtypes(include=["number", "bool"])
+    numeric_data.drop(target, axis=1)
     numeric_data = numeric_data.astype({col : int for col in numeric_data.select_dtypes("bool").columns})
     corr = numeric_data.corr(method=method)[protected].drop(protected)
     proxies = corr[corr.abs() > threshold].index.tolist()
-    return dataset.drop(proxies, axis=1)
+    to_remove = [p for p in proxies if p not in [protected, target]]
+    return dataset.drop(to_remove, axis=1)
 
 
 def split(dataset, test_size, protected_feature, split_strategy, seed, target_feature, balance_strategy, balance_seed, hide_protected, hide_proxies):
     if hide_proxies :
-        dataset = hide_p_proxies(dataset, protected_feature)
+        dataset = hide_p_proxies(dataset, target_feature, protected_feature)
     train, test = train_test(dataset, test_size, protected_feature, split_strategy, seed)
     X_train, y_train, p_train = x_y_p(train, target_feature, protected_feature)
     X_test, y_test, p_test = x_y_p(test, target_feature, protected_feature)
