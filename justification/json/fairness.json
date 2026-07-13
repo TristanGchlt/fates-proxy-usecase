@@ -7,9 +7,9 @@
       "type": "conclusion"
     },
     {
-      "escaped": "demographic_parity_difference_is_less_than_0_2",
-      "id": "fair:dp_threshold",
-      "label": "Demographic Parity Difference is less than 0.2",
+      "escaped": "disparate_impact_is_greater_than_0_8",
+      "id": "fair:di_threshold",
+      "label": "Disparate Impact is greater than 0.8",
       "type": "strategy"
     },
     {
@@ -29,16 +29,16 @@
   "type": "justification",
   "relations": [
     {
-      "source": "fair:dp_threshold",
+      "source": "fair:di_threshold",
       "target": "fair:c"
     },
     {
       "source": "fair:model",
-      "target": "fair:dp_threshold"
+      "target": "fair:di_threshold"
     },
     {
       "source": "fair:dataset",
-      "target": "fair:dp_threshold"
+      "target": "fair:di_threshold"
     }
   ]
 }

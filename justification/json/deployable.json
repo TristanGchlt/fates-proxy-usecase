@@ -13,9 +13,9 @@
       "type": "sub-conclusion"
     },
     {
-      "escaped": "demographic_parity_difference_is_less_than_0_2",
-      "id": "deployable:fair:dp_threshold",
-      "label": "Demographic Parity Difference is less than 0.2",
+      "escaped": "disparate_impact_is_greater_than_0_8",
+      "id": "deployable:fair:di_threshold",
+      "label": "Disparate Impact is greater than 0.8",
       "type": "strategy"
     },
     {
@@ -57,7 +57,7 @@
       "target": "deployable:assembleConclusion"
     },
     {
-      "source": "deployable:fair:dp_threshold",
+      "source": "deployable:fair:di_threshold",
       "target": "deployable:fair:c"
     },
     {
@@ -66,11 +66,11 @@
     },
     {
       "source": "deployable:unified_0",
-      "target": "deployable:fair:dp_threshold"
+      "target": "deployable:fair:di_threshold"
     },
     {
       "source": "deployable:unified_1",
-      "target": "deployable:fair:dp_threshold"
+      "target": "deployable:fair:di_threshold"
     },
     {
       "source": "deployable:unified_0",
