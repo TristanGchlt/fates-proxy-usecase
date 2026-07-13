@@ -50,7 +50,8 @@ def run_pipeline() :
                                                               target_feature = config['target_feature'], 
                                                               balance_strategy = config['f_balance'], 
                                                               balance_seed = config['f_balance_seed'], 
-                                                              hide_protected = config["f_hide_protected"])
+                                                              hide_protected = config["f_hide_protected"],
+                                                              hide_proxies = config['f_hide_proxies'])
         
 
         # Suivi de la config dans mlflow
