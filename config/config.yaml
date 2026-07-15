@@ -15,8 +15,8 @@ f_hide_proxies : true
 model_name : RFC_Baseline
 model_type : "Random Forest Classifier"
 model_hyperparameters :
-  n_estimators : 200
-  max_depth : 15
+  n_estimators : 500
+  max_depth : 30
   random_state : 1
 
 ### EVAL CONFIG
