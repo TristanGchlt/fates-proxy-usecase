@@ -2,12 +2,12 @@ justification fair {
 
     conclusion c is "Model is Fair"
     
-    strategy dp_threshold is "Demographic Parity Difference is less than 0.2"
-    dp_threshold supports c
+    strategy di_threshold is "Disparate Impact is greater than 0.8"
+    di_threshold supports c
 
     evidence model is "Model is available"
-    model supports dp_threshold
+    model supports di_threshold
 
     evidence dataset is "Test dataset is available" 
-    dataset supports dp_threshold
+    dataset supports di_threshold
 }

@@ -5,18 +5,18 @@ target_feature : income
 split_random_seed : 1
 test_size : 0.2
 # Data fairness
-f_split_strategy : random # Strategies : random, stratified
-f_balance : none # Balances : none, undersampling / Plus tard on pourrait ajouter oversampling et smote
+f_split_strategy : stratified # Strategies : random, stratified
+f_balance : undersampling # Balances : none, undersampling / Plus tard on pourrait ajouter oversampling et smote
 f_balance_seed : 1
-f_hide_protected : false
-f_hide_proxies : false
+f_hide_protected : true
+f_hide_proxies : true
 
 ### MODEL CONFIG
 model_name : RFC_Baseline
 model_type : "Random Forest Classifier"
 model_hyperparameters :
-  n_estimators : 100
-  max_depth : 10
+  n_estimators : 500
+  max_depth : 30
   random_state : 1
 
 ### EVAL CONFIG
@@ -26,3 +26,4 @@ metrics :
   - disparate_impact
   - demographic_parity
   - equalized_odds
+  - disparate_impact

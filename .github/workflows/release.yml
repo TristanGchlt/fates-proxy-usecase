@@ -15,9 +15,6 @@ on:
 
   pull_request:
 
-env:
-  JUSTIFICATION_MODEL: "./justification/json/deployable.json"
-
 jobs:
 
   check-release-is-ok:
@@ -48,8 +45,9 @@ jobs:
       - name: Run jPipe Runner to support model training justification
         uses: jpipe-mcscert/jpipe-runner@v3.4.1
         with:
-          jd_file: ${{ env.JUSTIFICATION_MODEL }}
+          jd_file: justification/json/deployable.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: v3.4.1
           python_path: "poetry run python"
           library: justification/py/deployable.py
+          embed_image: "true"
