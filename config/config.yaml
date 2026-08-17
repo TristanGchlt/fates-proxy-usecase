@@ -23,5 +23,6 @@ model_hyperparameters :
 metrics : 
   - accuracy
   - f1_score
+  - disparate_impact
   - demographic_parity
   - equalized_odds
