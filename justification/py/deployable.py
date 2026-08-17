@@ -94,7 +94,8 @@ def test_dataset_is_available(produce: JpipeProduce) -> bool:
                                                                 target_feature = config['target_feature'], 
                                                                 balance_strategy = config['f_balance'], 
                                                                 balance_seed = config['f_balance_seed'], 
-                                                                hide_protected = config["f_hide_protected"])
+                                                                hide_protected = config["f_hide_protected"],
+                                                                hide_proxies = config["f_hide_proxies"])
             test_data = {
                 "X_test" : X_test,
                 "y_test" : y_test,
