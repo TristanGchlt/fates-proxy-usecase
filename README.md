@@ -52,6 +52,10 @@ Fairness process and evaluation are available in order to justify fairness const
 
 ## WIP
 
+### "Demo" Pull Requests
+
+Several Pull Requests have been built, and will be built, to serve as a demo to represent the process of justification reviews and the potential adaptation steps that it entails.
+
 ### Transparency Package
 
 Implementation of optional transparency evaluation in order to justify transparency constraints according to justifications to be tested on CI.
