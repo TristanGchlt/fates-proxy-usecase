@@ -22,10 +22,10 @@ MODEL_PATH = PROJECT_ROOT / "model"
 
 config = read_config(CONFIG_PATH)
 
-def run_pipeline(config=config, write=True) :
+def run_pipeline(config=config, write=True, experiment_name="my_experiment") :
 
     # Préparation du tracking
-    mlflow.set_experiment("my_experiment")
+    mlflow.set_experiment(experiment_name)
 
     # Récupération des paramètres
     
