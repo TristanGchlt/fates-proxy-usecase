@@ -6,7 +6,7 @@ split_random_seed : 1
 test_size : 0.2
 # Data fairness
 f_split_strategy : random # Strategies : random, stratified
-f_balance : none # Balances : none, undersampling / Plus tard on pourrait ajouter oversampling et smote
+f_balance : none # Balances : none, undersampling, oversampling, smote
 f_balance_seed : 1
 f_hide_protected : false
 f_hide_proxies : false
