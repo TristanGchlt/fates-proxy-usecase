@@ -44,20 +44,8 @@ Once you push new code, justification is test with github actions to ensure that
 
 ![CI Schema](img/readme_schema_1.png "CI Pipeline Schema")
 
-## Fairness
+## Fairness (WIP)
 
 Fairness process and evaluation are available in order to justify fairness constraints according to justifications to be tested on CI.
 
 ![Fairness Schema](img/readme_schema_2.png "Fairness Pipeline Schema")
-
-## WIP
-
-### "Demo" Pull Requests
-
-Several Pull Requests have been built, and will be built, to serve as a demo to represent the process of justification reviews and the potential adaptation steps that it entails.
-
-### Transparency Package
-
-Implementation of optional transparency evaluation in order to justify transparency constraints according to justifications to be tested on CI.
-
-![Transparency Schema](img/readme_schema_3.png "WIP Transparency Pipeline Schema")
